@@ -1,0 +1,22 @@
+{
+  "utilisateur1": {
+    "name": "John donald Duck",
+    "age": 40000,
+    "hobbies": ["reading", "coding", "gaming"]
+  },
+  "utilisateur2": {
+    "name": "John Duck",
+    "age": 40000,
+    "hobbies": ["reading", "sleeping", "gaming"]
+  },
+  "utilisateur3": {
+    "name": "John donald Duck",
+    "age": 40000,
+    "hobbies": ["reading", "coding", "gaming"]
+  },
+  "utilisateur4": {
+    "name": "John Duck",
+    "age": 0,
+    "hobbies": ["reading", "coding", "gaming", "sleeping"]
+  }
+}
