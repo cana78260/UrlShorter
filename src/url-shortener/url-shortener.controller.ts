@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { UrlShortenerService } from './url-shortener.service';
 import { CreateUrlShortenerDto } from './dto/create-url-shortener.dto';
 import { UpdateUrlShortenerDto } from './dto/update-url-shortener.dto';
+import { Response } from 'express';
 
 @Controller('url-shortener')
 export class UrlShortenerController {
@@ -27,9 +29,21 @@ export class UrlShortenerController {
   }
 
   @Post('/data')
-  public async saveUrlData(): Promise<void> {
-    await this.urlShortenerService.saveUrlData();
+  public async saveUrlData(
+    @Body() createUrlShortenerDto: CreateUrlShortenerDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    // res.setHeader('mime-type', 'application/json');
+    // return res;
+
+    await this.urlShortenerService.saveUrlData(createUrlShortenerDto, res);
   }
+
+  // @Get()
+  // async getHello(@Res() res: Response): Promise<void> {
+  //   res.set({ Headers: 'Content-Type', Value: 'image/png' });
+  //   res.send();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

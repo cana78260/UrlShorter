@@ -10,15 +10,17 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-// recuperer tous les data 
+  // recuperer tous les data
   @Get('/data')
   async getData(): Promise<any> {
     console.log('controller ++++');
     return await this.appService.getData();
   }
-  //  envoie la data dans le fichier 
+  //  envoie la data dans le fichier
   @Post('/data')
-  public async saveData(@body() createUrlShortenerDto: CreateUrlShortenerDto): Promise<void> {
+  public async saveData(
+    @Body() createUrlShortenerDto: CreateUrlShortenerDto,
+  ): Promise<void> {
     await this.appService.saveData();
   }
 }
