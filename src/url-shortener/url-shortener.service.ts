@@ -33,6 +33,7 @@ export class UrlShortenerService {
     createUrlShortenerDto: CreateUrlShortenerDto,
     res: Response,
   ): Promise<void> {
+    //Lecture du fichier json
     const fileContent: any = await new Promise((resolve, reject) => {
       fs.readFile('data.json', 'utf-8', function (err, data) {
         if (err) {
@@ -44,33 +45,27 @@ export class UrlShortenerService {
       });
     });
 
-    // const fileContent = fs.readFile('data.json', 'utf-8');
     console.log(fileContent);
+    //On parse le fichier en objet java script
     const data = JSON.parse(fileContent);
     console.log('data après le parse', data);
 
+    //On génère un UUID
     const idvalue = uuidv4();
     console.log('valueID', idvalue);
-    // console.log('id', id);
 
-    // @Post()
-    // @HttpCode(HttpStatus.CREATED)
-    // create(@Body() body: { url: string }) {
-    //   const link = this.linksService.createLink(body.url);
-    //   return {
-    //     id: link.id,
-    //     shortUrl: link.shortUrl,
-    //     removalToken: link.removalToken,
-    //   };
-
+    //On récupère l'URL originale dans une variable
     const originalUrl = createUrlShortenerDto;
     console.log('originalUrl----------------------------------', originalUrl);
+
+    //Création de l'URL raccourcie avec un ID unique
     const shortUrlToString = `https://mon-domaine.com/${idvalue}`;
     console.log(
       'shortUrlToString<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<',
       shortUrlToString,
     );
 
+    //Génération d'un token avec l'ID dans le payload
     const payload = {
       tokenId: idvalue,
     };
@@ -79,40 +74,7 @@ export class UrlShortenerService {
     const tokenDelete = this.jwtService.sign(payload, options);
     console.log(tokenDelete);
 
-    // const removalToken = this.jwtService.sign(payload)
-    // let shortUrl;
-    // if (shortUrl) {
-    //   shortUrl = url.parse(shortUrlToString);
-    // }
-
-    // Chemin du fichier JSON contenant les URLs raccourcies
-    // const filePath = './data.json';
-
-    // Génération d'un token aléatoire
-    // const generateToken = () => {
-    //   return crypto.randomBytes(20).toString('hex');
-    // };
-
-    // Création d'une nouvelle URL raccourcie avec un token
-    // const createShortUrl = (originalUrl) => {
-    //   // Génération du token
-    //   const token = generateToken();
-    //   console.log('token++++++++++++++++++++', token);
-    //   // Chargement des URLs raccourcies existantes depuis le fichier JSON
-    //   const urls = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-
-    //   // Ajout de la nouvelle URL raccourcie avec le token
-    //   urls[token] = { originalUrl: originalUrl };
-
-    //   // Enregistrement de l'objet URLs dans le fichier JSON
-    //   fs.writeFileSync(filePath, JSON.stringify(urls));
-
-    //   return `https://mon-domaine.com/${token}`;
-    // };
-
-    // const shortUrl = createShortUrl;
-
-    //------------------------------------------------
+    //Création d'une propriété supplémentaire dans un objet
     data[idvalue] = {
       idvalue,
       originalUrl,
@@ -122,29 +84,23 @@ export class UrlShortenerService {
     // );
     //----------------------------------------------------------
     const mimeType = 'application/json';
-    const location = shortUrlToString;
-    const removalToken = tokenDelete;
 
     //-----------------------------------------------------------
     console.log('data après le push', data);
+
+    //écrasement du fichier avec les données d'origine et les données supplémentaires
     await fs.promises.writeFile('data.json', JSON.stringify(data), {
       encoding: 'utf-8',
     });
-    // res.headers.set('Content-Type: ', mimeType);
-    // res.set({ 'Content-Type': 'Content-Type: ', Value: mimeType });
-    // res.set()('X-Removal-Token: ', removalToken);
+
+    //Génération de la réponse
     res.set({
       'Content-Type': mimeType,
       location: shortUrlToString,
-      'X-Removal-Token': removalToken,
+      'X-Removal-Token': tokenDelete,
     });
     res.send({ status: 'ok' });
   }
-  // res.set({
-  //   Headers: {
-  //     'Content-Type': 'image/png',
-  //   },
-  // });
 
   findAll() {
     return `This action returns all urlShortener`;
