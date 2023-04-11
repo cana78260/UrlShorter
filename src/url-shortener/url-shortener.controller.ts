@@ -33,17 +33,9 @@ export class UrlShortenerController {
     @Body() createUrlShortenerDto: CreateUrlShortenerDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<void> {
-    // res.setHeader('mime-type', 'application/json');
-    // return res;
-
+    console.log('**************createUrlShortenerDto', createUrlShortenerDto);
     await this.urlShortenerService.saveUrlData(createUrlShortenerDto, res);
   }
-
-  // @Get()
-  // async getHello(@Res() res: Response): Promise<void> {
-  //   res.set({ Headers: 'Content-Type', Value: 'image/png' });
-  //   res.send();
-  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
